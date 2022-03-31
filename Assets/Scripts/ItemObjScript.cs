@@ -16,4 +16,11 @@ public class ItemObjScript : MonoBehaviour
     {
         
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Beaker")
+            //add to mix and then destroy
+            {}
+    }
 }
