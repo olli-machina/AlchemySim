@@ -6,30 +6,74 @@ using System.IO;
 public class RecipeManager : MonoBehaviour
 {
     List<Combination> recipeList;
+    List<Item> itemList;
+    string[] itemNames;
+    List<string> combos;
 
     private string dataPath = "Assets/ItemList.txt";
 
     void Start()
     {
-        //load txt and library
+        combos = new List<string>();
+        recipeList = new List<Combination>();
+        itemList = new List<Item>();
+        Init();
     }
 
-    void LoadTxtData()
+    private void Init()
     {
         StreamReader sReader = new StreamReader(dataPath);
         string[] dataLines = sReader.ReadToEnd().Split('\n');
-        
-        for(int i = 0; i < dataLines.Length; i++)
+        itemNames = new string[dataLines.Length];
+
+        for (int i = 0; i < dataLines.Length; i++) //get all ingredients in list
         {
             string[] splitLine = dataLines[i].Split(char.Parse(","));
 
             if (splitLine[0] == "")
                 continue;
 
-            Item newItem = (Item)ScriptableObject.CreateInstance("Item") as Item;
+            itemNames[i] = splitLine[0].Trim("\"".ToCharArray()); //get all items names
+            Debug.Log(splitLine[1].Trim("\"".ToCharArray()));
 
+            if(splitLine[1] == "0")
+            {
+                Item newItem = (Item)ScriptableObject.CreateInstance("Item") as Item;
+                newItem.setName = splitLine[0].Trim("\"".ToCharArray());
+                itemList.Add(newItem);
+            }
+            else
+            {
+                combos.Add(splitLine[2].Trim("\"".ToCharArray()));
+            }
         }
 
+        for(int j = 0; j < combos.Count; j++)
+        {
+            Item newItem1 = (Item)ScriptableObject.CreateInstance("Item") as Item;
+            newItem1.setName = combos[j].Split('/')[0];
+            itemList.Add(newItem1);
+
+            Item newItem2 = (Item)ScriptableObject.CreateInstance("Item") as Item;
+            newItem2.setName = combos[j].Split('/')[1];
+            itemList.Add(newItem2);
+
+            Combination newCombo = ScriptableObject.CreateInstance<Combination>();
+            newCombo.addObj1 = newItem1;
+            newCombo.addObj2 = newItem2;
+
+            recipeList.Add(newCombo);
+        }
+
+        debugPrint();
+    }
+
+    void debugPrint()
+    {
+        for(int i = 0; i < combos.Count; i++)
+        {
+            Debug.Log(recipeList[i]);
+        }
     }
 
     // Update is called once per frame

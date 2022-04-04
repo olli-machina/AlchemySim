@@ -1,13 +1,10 @@
-//base items
 "Air", 0
 "Water", 0
 "Earth", 0
 "Fire", 0
-
-//name, recipe, end of chain
-"Steam", "Water/Fire", 1
-"Mist", "Water/Air", 1
-"Dust", "Earth/Air", 1 
-"Lava", "Earth/Fire", 1
-"Mud", "Water/Earth", 1
-"Smoke", "Air/Fire", 1
+"Steam", 1, "Water/Fire"
+"Mist", 1, "Water/Air"
+"Dust", 1, "Earth/Air"
+"Lava", 1, "Earth/Fire"
+"Mud", 1, "Water/Earth"
+"Smoke", 1, "Air/Fire"

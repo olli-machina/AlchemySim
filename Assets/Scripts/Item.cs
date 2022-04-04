@@ -11,7 +11,7 @@ public class Item : ScriptableObject
     public Mesh mesh;
 }
 
-public class Combination
+public class Combination : ScriptableObject
 {
     public Item addObj1, addObj2;
 
