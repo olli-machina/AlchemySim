@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
         newItem.GetComponent<ItemObjScript>().setData(data);
 
         newItem.transform.position = new Vector3(0, 0.7f, 0);
+        
         //change mesh when we get there
 
     }

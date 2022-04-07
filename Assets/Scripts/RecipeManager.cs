@@ -11,6 +11,7 @@ public class RecipeManager : MonoBehaviour
     List<string> combos;
     public GameManager manager;
     Item objFirst, objSecond;
+    int index;
 
     private string dataPath = "Assets/ItemList.txt";
 
@@ -35,13 +36,11 @@ public class RecipeManager : MonoBehaviour
             if (splitLine[0] == "")
                 continue;
 
-            if(splitLine[1] == "0") //make this work with spaces~~~
-            {
-                Item newItem = (Item)ScriptableObject.CreateInstance("Item") as Item;
-                newItem.setName = splitLine[0].Trim("\"".ToCharArray());
-                itemList.Add(newItem);
-            }
-            else
+            Item newItem = (Item)ScriptableObject.CreateInstance("Item") as Item;
+            newItem.setName = splitLine[0].Trim("\"".ToCharArray());
+            itemList.Add(newItem);
+
+            if (splitLine[1] != "0") //make this work with spaces~~~
             {
                 itemNames[i] = splitLine[0].Trim("\"".ToCharArray()); //get all items names
                 combos.Add(splitLine[2].Trim("\"".ToCharArray()));
@@ -68,7 +67,7 @@ public class RecipeManager : MonoBehaviour
             recipeList.Add(newCombo);
         }
 
-        debugPrint();
+        //debugPrint();
     }
 
     void debugPrint()
@@ -89,12 +88,14 @@ public class RecipeManager : MonoBehaviour
     {
         if (recipeList.Exists(searchingCombo => searchingCombo.addObj1.setName == obj1.setName && searchingCombo.addObj2.setName == obj2.setName))
         {
+            index = recipeList.FindIndex(searchingCombo => searchingCombo.addObj1.setName == obj1.setName && searchingCombo.addObj2.setName == obj2.setName);
             objFirst = obj1;
             objSecond = obj2;
             return true;
         }
         if (recipeList.Exists(searchingCombo => searchingCombo.addObj1.setName == obj2.setName && searchingCombo.addObj2.setName == obj1.setName))
         {
+            index = recipeList.FindIndex(searchingCombo => searchingCombo.addObj1.setName == obj2.setName && searchingCombo.addObj2.setName == obj1.setName);
             objFirst = obj2;
             objSecond = obj1;
             return true;
@@ -108,8 +109,6 @@ public class RecipeManager : MonoBehaviour
     {
         if (isExist(obj1, obj2))
         {
-            Combination temp = new Combination(objFirst, objSecond);
-            int index = recipeList.IndexOf(temp);
             manager.createNewItem(itemList[index + 4]);
         }
 

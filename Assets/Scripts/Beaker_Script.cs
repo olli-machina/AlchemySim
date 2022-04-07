@@ -21,6 +21,12 @@ public class Beaker_Script : MonoBehaviour
         
     }
 
+    public void resetCombo()
+    {
+        combine1 = null;
+        combine2 = null;
+    }
+
     public void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Item")
@@ -31,6 +37,7 @@ public class Beaker_Script : MonoBehaviour
             {
                 combine2 = other.gameObject;
                 gameManager.checkForRecipe(combine1.GetComponent<ItemObjScript>().getData(), combine2.GetComponent<ItemObjScript>().getData());
+                resetCombo();
             }
 
         }
