@@ -17,6 +17,16 @@ public class ItemObjScript : MonoBehaviour
         
     }
 
+    public void setData(Item data)
+    {
+        itemData = data;
+    }
+
+    public Item getData()
+    {
+        return itemData;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Beaker")

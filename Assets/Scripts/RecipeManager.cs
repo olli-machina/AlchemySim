@@ -9,6 +9,8 @@ public class RecipeManager : MonoBehaviour
     List<Item> itemList;
     string[] itemNames;
     List<string> combos;
+    public GameManager manager;
+    Item objFirst, objSecond;
 
     private string dataPath = "Assets/ItemList.txt";
 
@@ -33,10 +35,7 @@ public class RecipeManager : MonoBehaviour
             if (splitLine[0] == "")
                 continue;
 
-            itemNames[i] = splitLine[0].Trim("\"".ToCharArray()); //get all items names
-            Debug.Log(splitLine[1].Trim("\"".ToCharArray()));
-
-            if(splitLine[1] == "0")
+            if(splitLine[1] == "0") //make this work with spaces~~~
             {
                 Item newItem = (Item)ScriptableObject.CreateInstance("Item") as Item;
                 newItem.setName = splitLine[0].Trim("\"".ToCharArray());
@@ -44,6 +43,7 @@ public class RecipeManager : MonoBehaviour
             }
             else
             {
+                itemNames[i] = splitLine[0].Trim("\"".ToCharArray()); //get all items names
                 combos.Add(splitLine[2].Trim("\"".ToCharArray()));
             }
         }
@@ -51,11 +51,14 @@ public class RecipeManager : MonoBehaviour
         for(int j = 0; j < combos.Count; j++)
         {
             Item newItem1 = (Item)ScriptableObject.CreateInstance("Item") as Item;
-            newItem1.setName = combos[j].Split('/')[0];
+            string trimmed = combos[j].Split('|')[1];
+            string name = trimmed.Split('/')[0];
+            newItem1.setName = name;
             itemList.Add(newItem1);
 
             Item newItem2 = (Item)ScriptableObject.CreateInstance("Item") as Item;
-            newItem2.setName = combos[j].Split('/')[1];
+            name = trimmed.Split('/')[1];
+            newItem2.setName = name;
             itemList.Add(newItem2);
 
             Combination newCombo = ScriptableObject.CreateInstance<Combination>();
@@ -72,7 +75,7 @@ public class RecipeManager : MonoBehaviour
     {
         for(int i = 0; i < combos.Count; i++)
         {
-            Debug.Log(recipeList[i]);
+            Debug.Log(recipeList[i].addObj1.setName);
         }
     }
 
@@ -84,14 +87,30 @@ public class RecipeManager : MonoBehaviour
 
     public bool isExist(Item obj1, Item obj2)
     {
-        return recipeList.Exists(searchingCombo => searchingCombo.addObj1 == obj1 && searchingCombo.addObj2 == obj2); //make sure this works correctly
+        if (recipeList.Exists(searchingCombo => searchingCombo.addObj1.setName == obj1.setName && searchingCombo.addObj2.setName == obj2.setName))
+        {
+            objFirst = obj1;
+            objSecond = obj2;
+            return true;
+        }
+        if (recipeList.Exists(searchingCombo => searchingCombo.addObj1.setName == obj2.setName && searchingCombo.addObj2.setName == obj1.setName))
+        {
+            objFirst = obj2;
+            objSecond = obj1;
+            return true;
+        }
+
+        else
+            return false;
     }
 
-    public void CheckItems(Item obj1, Item obj2)
+    public void checkItems(Item obj1, Item obj2)
     {
         if (isExist(obj1, obj2))
-        {  
-            //create recipe
+        {
+            Combination temp = new Combination(objFirst, objSecond);
+            int index = recipeList.IndexOf(temp);
+            manager.createNewItem(itemList[index + 4]);
         }
 
         else

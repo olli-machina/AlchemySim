@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject baseItem;
-    //RecipeManager recipeManager;
+    public RecipeManager recipeManager;
     public Mesh testMesh;
 
     // Start is called before the first frame update
@@ -20,20 +20,16 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void checkForRecipe(/*Item obj1, Item obj2*/)
+    public void checkForRecipe(Item obj1, Item obj2)
     {
-        //recipeManager.CheckItems(obj1, obj2);
-        Item test = new Item();
-        test.setName = "magic";
-        test.mesh = testMesh;
-
-        createNewItem(test);
+        recipeManager.checkItems(obj1, obj2);
     }
 
     public void createNewItem(Item data)
     {
         GameObject newItem = Instantiate(baseItem);
-        newItem.GetComponent<ItemObjScript>().itemData = data;
+        newItem.GetComponent<ItemObjScript>().setData(data);
+
         newItem.transform.position = new Vector3(0, 0.7f, 0);
         //change mesh when we get there
 

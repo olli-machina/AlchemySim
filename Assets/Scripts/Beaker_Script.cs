@@ -30,7 +30,7 @@ public class Beaker_Script : MonoBehaviour
             else
             {
                 combine2 = other.gameObject;
-                gameManager.checkForRecipe(/*combine1.GetComponent<Item>(), combine2.GetComponent<Item>()*/);
+                gameManager.checkForRecipe(combine1.GetComponent<ItemObjScript>().getData(), combine2.GetComponent<ItemObjScript>().getData());
             }
 
         }

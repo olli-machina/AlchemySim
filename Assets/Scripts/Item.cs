@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class Item : ScriptableObject
 {
     public string setName;
-    Image icon; //change to mesh later
-    public Mesh mesh;
+    //Image icon; //change to mesh later
+   // public Mesh mesh;
 }
 
 public class Combination : ScriptableObject

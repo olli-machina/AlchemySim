@@ -491,6 +491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseItem: {fileID: 1000650861}
+  recipeManager: {fileID: 1136055408}
   testMesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1118477079
 GameObject:
@@ -630,6 +631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a7e4e1f7dda91f4a8c8cd45c8bc49d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  manager: {fileID: 0}
 --- !u!4 &1136055409
 Transform:
   m_ObjectHideFlags: 0

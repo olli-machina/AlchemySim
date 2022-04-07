@@ -1,10 +1,10 @@
-"Air", 0
-"Water", 0
-"Earth", 0
-"Fire", 0
-"Steam", 1, "Water/Fire"
-"Mist", 1, "Water/Air"
-"Dust", 1, "Earth/Air"
-"Lava", 1, "Earth/Fire"
-"Mud", 1, "Water/Earth"
-"Smoke", 1, "Air/Fire"
+"Air",0,none
+"Water",0,none
+"Earth",0,none
+"Fire",0,none
+"Steam",1,|Water/Fire|
+"Mist",1,|Water/Air|
+"Dust",1,|Earth/Air|
+"Lava",1,|Earth/Fire|
+"Mud",1,|Water/Earth|
+"Smoke",1,|Air/Fire|
