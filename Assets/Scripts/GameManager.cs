@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public GameObject baseItem;
     public RecipeManager recipeManager;
-    public Mesh testMesh;
+    public MeshFilter testMesh;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
         GameObject newItem = Instantiate(baseItem);
         newItem.GetComponent<ItemObjScript>().setData(data);
 
+        newItem.GetComponent<Renderer>().material.color = data.matColor;
         newItem.transform.position = new Vector3(0, 0.7f, 0);
         
         //change mesh when we get there
