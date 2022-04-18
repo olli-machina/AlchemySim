@@ -28,7 +28,7 @@ public class RecipeManager : MonoBehaviour
         StreamReader sReader = new StreamReader(dataPath);
         string[] dataLines = sReader.ReadToEnd().Split('\n');
         itemNames = new string[dataLines.Length];
-        float r = 0;
+        float r = 0, g=0, b=0;
 
         for (int i = 0; i < dataLines.Length; i++) //get all ingredients in list
         {
@@ -41,9 +41,12 @@ public class RecipeManager : MonoBehaviour
             newItem.setName = splitLine[0].Trim("\"".ToCharArray());
             string[] colorStr = splitLine[3].Split(char.Parse("/"));
 
-            r = float.Parse(colorStr[0]);
-            //newItem.matColor = new Color(float.Parse(colorStr[0]), float.Parse(colorStr[1]), float.Parse(colorStr[2]));
-            Debug.Log(r);
+            r = float.Parse(colorStr[0].Trim("|".ToCharArray())) / 255f;
+            g = float.Parse(colorStr[1]) / 255f;
+            b = float.Parse(colorStr[2].Trim("|\r".ToCharArray())) / 255f;
+           // Debug.Log(r + " " + g + " " + b);
+            newItem.matColor = new Color(r,g,b);
+
             itemList.Add(newItem);
 
             if (splitLine[1] != "0") //make this work with spaces~~~
@@ -73,7 +76,7 @@ public class RecipeManager : MonoBehaviour
             recipeList.Add(newCombo);
         }
 
-        //debugPrint();
+        manager.setMenu(itemList.Count);
     }
 
     void debugPrint()

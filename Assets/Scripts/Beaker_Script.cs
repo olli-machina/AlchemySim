@@ -27,6 +27,13 @@ public class Beaker_Script : MonoBehaviour
         combine2 = null;
     }
 
+    public void DestroyObj()
+    {
+        Destroy(combine1);
+        Destroy(combine2);
+        resetCombo();
+    }
+
     public void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Item")
@@ -37,7 +44,6 @@ public class Beaker_Script : MonoBehaviour
             {
                 combine2 = other.gameObject;
                 gameManager.checkForRecipe(combine1.GetComponent<ItemObjScript>().getData(), combine2.GetComponent<ItemObjScript>().getData());
-                resetCombo();
             }
 
         }

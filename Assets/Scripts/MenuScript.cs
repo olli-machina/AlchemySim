@@ -1,29 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class ItemObjScript : MonoBehaviour
+public class MenuScript : MonoBehaviour
 {
-    public Item itemData;
+    GameObject[] itemPanels;
+    GameObject singlePanel;
+
+    public void InitMenu(int numItems)
+    {
+        itemPanels = new GameObject[numItems];
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        name = itemData.setName;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
-    }
-
-    public void setData(Item data)
-    {
-        itemData = data;
-    }
-
-    public Item getData()
-    {
-        return itemData;
     }
 }
