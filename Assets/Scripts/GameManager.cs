@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         recipeManager.checkItems(obj1, obj2);
     }
 
-    public void createNewItem(Item data)
+    public GameObject createNewItem(Item data)
     {
         GameObject newItem = Instantiate(baseItem);
         newItem.GetComponent<ItemObjScript>().setData(data);
@@ -40,6 +40,14 @@ public class GameManager : MonoBehaviour
         newItem.transform.position = new Vector3(0, 0.7f, 0);
 
         beaker.DestroyObj();
+
+        return newItem;
+    }
+
+    public void createNewItem(Item data, Vector3 position)
+    {
+        GameObject createItem = createNewItem(data);
+        createItem.transform.position = position;
     }
 
     public void setMenu(int numItems)

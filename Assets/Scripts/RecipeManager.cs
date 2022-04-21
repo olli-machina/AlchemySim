@@ -124,4 +124,15 @@ public class RecipeManager : MonoBehaviour
         else
             return;
     }
+
+    public Item getItem(string name)
+    {
+        for( int i = 0; i < itemList.Count; i++)
+        {
+            if (itemList[i].setName == name)
+                return itemList[i];
+        }
+
+        return null;
+    }
 }
