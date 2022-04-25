@@ -7,10 +7,11 @@ using TMPro;
 
 public class MenuScript : MonoBehaviour
 {
-    GameObject[] itemPanels;
+    public GameObject[] itemPanels;
     GameObject singlePanel;
     public Vector3[] positions;
     int currentPos = 0;
+    int menuSquare = 4;
 
     GraphicRaycaster raycaster;
     public RecipeManager recipeManager;
@@ -18,7 +19,7 @@ public class MenuScript : MonoBehaviour
 
     public void InitMenu(int numItems)
     {
-        itemPanels = new GameObject[numItems];
+       // itemPanels = new GameObject[numItems];
     }
 
     // Start is called before the first frame update
@@ -46,19 +47,35 @@ public class MenuScript : MonoBehaviour
 
         if (results.Count > 0 && results[0].gameObject.tag == "MenuButton")
         {
+            if(currentPos > positions.Length-1)
+                currentPos = 0;
+            
             Item newItem = recipeManager.getItem(results[0].gameObject.GetComponentInChildren<TMP_Text>().text);
+            Debug.Log(newItem.setName);
             gameManager.createNewItem(newItem, positions[currentPos]);
             currentPos++;
             results.Clear();
 
-            if(currentPos > positions.Length-1)
-            {
-                currentPos = 0;
-            }
         }
         else
         {
             results.Clear();
         }
+    }
+
+    public void AddToMenu(Color color, string name)
+    {
+        for (int i = 0; i < itemPanels.Length; i++)
+        {
+            if (itemPanels[i].name == name)
+                return;
+        }
+
+        itemPanels[menuSquare].name = name;
+        itemPanels[menuSquare].GetComponentInChildren<TMP_Text>().text = name;
+        itemPanels[menuSquare].GetComponent<Image>().color = color;
+
+        itemPanels[menuSquare].SetActive(true);
+        menuSquare++;
     }
 }
