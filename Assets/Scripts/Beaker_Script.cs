@@ -8,20 +8,7 @@ public class Beaker_Script : MonoBehaviour
     [SerializeField]
     GameObject combine1, combine2;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void resetCombo()
+    public void ResetCombo()
     {
         combine1 = null;
         combine2 = null;
@@ -31,19 +18,23 @@ public class Beaker_Script : MonoBehaviour
     {
         Destroy(combine1);
         Destroy(combine2);
-        resetCombo();
+        ResetCombo();
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Item")
+        if(other.CompareTag("Item"))
         {
             if (combine1 == null)
+            {
                 combine1 = other.gameObject;
+                gameManager.ClearPositions(combine1);
+            }
             else
             {
                 combine2 = other.gameObject;
-                gameManager.checkForRecipe(combine1.GetComponent<ItemObjScript>().getData(), combine2.GetComponent<ItemObjScript>().getData());
+                gameManager.ClearPositions(combine2);
+                gameManager.CheckForRecipe(combine1.GetComponent<ItemObjScript>().GetData(), combine2.GetComponent<ItemObjScript>().GetData());
             }
 
         }

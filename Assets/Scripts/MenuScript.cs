@@ -8,52 +8,62 @@ using TMPro;
 public class MenuScript : MonoBehaviour
 {
     public GameObject[] itemPanels;
-    GameObject singlePanel;
     public Vector3[] positions;
-    int currentPos = 0;
     int menuSquare = 4;
 
     GraphicRaycaster raycaster;
     public RecipeManager recipeManager;
     public GameManager gameManager;
 
-    public void InitMenu(int numItems)
-    {
-       // itemPanels = new GameObject[numItems];
-    }
 
-    // Start is called before the first frame update
     void Start()
     {
-        this.raycaster = GetComponent<GraphicRaycaster>();
+        raycaster = GetComponent<GraphicRaycaster>();
     }
 
-    // Update is called once per frame
+    public void InitMenu(int numItems)
+    {
+        //if I make the menu dynamic, implement functions here
+    }
+
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
-            spawnItem();
+            SpawnItem();
         }
     }
 
-    void spawnItem()
+    /*
+     * Purpose: spawn corresponding item from menu click
+     */
+    void SpawnItem()
     {
         PointerEventData pointerData = new PointerEventData(EventSystem.current);
         List<RaycastResult> results = new List<RaycastResult>();
 
         pointerData.position = Input.mousePosition;
-        this.raycaster.Raycast(pointerData, results);
+        raycaster.Raycast(pointerData, results);
 
-        if (results.Count > 0 && results[0].gameObject.tag == "MenuButton")
+        if (results.Count > 0 && results[0].gameObject.CompareTag("MenuButton"))
         {
-            if(currentPos > positions.Length-1)
-                currentPos = 0;
-            
-            Item newItem = recipeManager.getItem(results[0].gameObject.GetComponentInChildren<TMP_Text>().text);
-            Debug.Log(newItem.setName);
-            gameManager.createNewItem(newItem, positions[currentPos]);
-            currentPos++;
+            bool found = false;
+            Item newItem = recipeManager.GetItem(results[0].gameObject.GetComponentInChildren<TMP_Text>().text);
+            for(int i = 0; i < 4; i++)
+            {
+                if (results[0].gameObject == itemPanels[i])
+                {
+                    gameManager.CreateBaseItem(newItem);
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found)
+            {
+                gameManager.CreateNewItem(newItem);
+            }
+
             results.Clear();
 
         }
@@ -63,6 +73,9 @@ public class MenuScript : MonoBehaviour
         }
     }
 
+    /*
+     * Purpose: add the item data to the menu slot
+     */
     public void AddToMenu(Color color, string name)
     {
         for (int i = 0; i < itemPanels.Length; i++)

@@ -10,10 +10,9 @@ public class RecipeManager : MonoBehaviour
     string[] itemNames;
     List<string> combos;
     public GameManager manager;
-    Item objFirst, objSecond;
     int index;
 
-    private string dataPath = "Assets/ItemList.txt";
+    private readonly string dataPath = "Assets/ItemList.txt";
 
     void Start()
     {
@@ -23,12 +22,15 @@ public class RecipeManager : MonoBehaviour
         Init();
     }
 
+    /*
+     * Purpose: read txt data and create corresponding items
+     */
     private void Init()
     {
         StreamReader sReader = new StreamReader(dataPath);
         string[] dataLines = sReader.ReadToEnd().Split('\n');
         itemNames = new string[dataLines.Length];
-        float r = 0, g=0, b=0;
+        float r, g, b;
 
         for (int i = 0; i < dataLines.Length; i++) //get all ingredients in list
         {
@@ -44,12 +46,11 @@ public class RecipeManager : MonoBehaviour
             r = float.Parse(colorStr[0].Trim("|".ToCharArray())) / 255f;
             g = float.Parse(colorStr[1]) / 255f;
             b = float.Parse(colorStr[2].Trim("|\r".ToCharArray())) / 255f;
-           // Debug.Log(r + " " + g + " " + b);
             newItem.matColor = new Color(r,g,b);
 
             itemList.Add(newItem);
 
-            if (splitLine[1] != "0") //make this work with spaces~~~
+            if (splitLine[1] != "0")
             {
                 itemNames[i] = splitLine[0].Trim("\"".ToCharArray()); //get all items names
                 combos.Add(splitLine[2].Trim("\"".ToCharArray()));
@@ -76,37 +77,22 @@ public class RecipeManager : MonoBehaviour
             recipeList.Add(newCombo);
         }
 
-        manager.setMenu(itemList.Count);
+        manager.SetMenu(itemList.Count);
     }
 
-    void debugPrint()
-    {
-        for(int i = 0; i < combos.Count; i++)
-        {
-            Debug.Log(recipeList[i].addObj1.setName);
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public bool isExist(Item obj1, Item obj2)
+    /*
+     * Purpose: is there a recipe that includes the combined items:
+     */
+    public bool IsExist(Item obj1, Item obj2)
     {
         if (recipeList.Exists(searchingCombo => searchingCombo.addObj1.setName == obj1.setName && searchingCombo.addObj2.setName == obj2.setName))
         {
             index = recipeList.FindIndex(searchingCombo => searchingCombo.addObj1.setName == obj1.setName && searchingCombo.addObj2.setName == obj2.setName);
-            objFirst = obj1;
-            objSecond = obj2;
             return true;
         }
         if (recipeList.Exists(searchingCombo => searchingCombo.addObj1.setName == obj2.setName && searchingCombo.addObj2.setName == obj1.setName))
         {
             index = recipeList.FindIndex(searchingCombo => searchingCombo.addObj1.setName == obj2.setName && searchingCombo.addObj2.setName == obj1.setName);
-            objFirst = obj2;
-            objSecond = obj1;
             return true;
         }
 
@@ -114,18 +100,24 @@ public class RecipeManager : MonoBehaviour
             return false;
     }
 
-    public void checkItems(Item obj1, Item obj2)
+    /*
+     * Purpose: check if recipe exists, if so then spawn the item
+     */
+    public void CheckItems(Item obj1, Item obj2)
     {
-        if (isExist(obj1, obj2))
+        if (IsExist(obj1, obj2))
         {
-            manager.createNewItem(itemList[index + 4]);
+            manager.CreateNewItem(itemList[index + 4]);
         }
 
         else
             return;
     }
 
-    public Item getItem(string name)
+    /*
+     * Purpose: search for specific item in list and return it
+     */
+    public Item GetItem(string name)
     {
         for( int i = 0; i < itemList.Count; i++)
         {
