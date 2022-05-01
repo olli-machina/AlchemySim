@@ -9,10 +9,8 @@ public class GameManager : MonoBehaviour
     public Beaker_Script beaker;
     public MenuScript menu;
 
-    public GameObject[] starting;//temp
     public Vector3[] spawnPositions;
     ItemSlots[] startingPositions;
-    int currentPos = 0;
 
 
     struct ItemSlots
@@ -21,7 +19,6 @@ public class GameManager : MonoBehaviour
         public bool filled;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         startingPositions = new ItemSlots[spawnPositions.Length];
@@ -32,68 +29,96 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    /*
+     * Purpose: spawn base 4 items
+     */
     void SpawnStartItems()
     {
-        createBaseItem(recipeManager.getItem("Water"));
-        createBaseItem(recipeManager.getItem("Fire"));
-        createBaseItem(recipeManager.getItem("Earth"));
-        createBaseItem(recipeManager.getItem("Air"));
+        CreateBaseItem(recipeManager.GetItem("Water"));
+        CreateBaseItem(recipeManager.GetItem("Fire"));
+        CreateBaseItem(recipeManager.GetItem("Earth"));
+        CreateBaseItem(recipeManager.GetItem("Air"));
     }
 
-    public void checkForRecipe(Item obj1, Item obj2)
+    /*
+     * Purpose: communicate this function between beaker and reicpe manager
+     */
+    public void CheckForRecipe(Item obj1, Item obj2)
     {
-        recipeManager.checkItems(obj1, obj2);
+        recipeManager.CheckItems(obj1, obj2);
     }
 
-    public void createNewItem(Item data)
-    {
-        instantiateObj(data);
-
-        beaker.DestroyObj();
-
-        menu.AddToMenu(data.matColor, data.setName);
-    }
-
-    public GameObject instantiateObj(Item data)
-    {
-        GameObject newItem = Instantiate(baseItem);
-        newItem.GetComponent<ItemObjScript>().setData(data);
-
-        newItem.GetComponent<Renderer>().material.color = data.matColor;
-        newItem.transform.position = spawnPositions[currentPos];
-
-        return newItem;
-    }
-
-    public void createBaseItem(Item data)
+    /*
+     * Purpose: spawn an item that is part of the base 4
+     */
+    public void CreateBaseItem(Item data)
     {
         Vector3 openPosition = Vector3.zero;
-        for (int i = 0; i < startingPositions.Length; i++)
+        for (int i = 0; i < 4; i++)
         {
             if (!startingPositions[i].filled)
             {
                 openPosition = startingPositions[i].position;
                 startingPositions[i].filled = true;
+                data.positionIndex = i;
                 break;
             }
         }
 
-        createNewItem(data, openPosition);
+        InstantiateObj(data, openPosition);
     }
 
-    public void createNewItem(Item data, Vector3 position)
+    /*
+     * Purpose: spawn an item that is not part of the base 4
+     */
+    public void CreateNewItem(Item data)
     {
-        GameObject createItem = instantiateObj(data);
-        createItem.transform.position = position;
+        Vector3 openPosition = Vector3.zero;
+        for (int i = 4; i < startingPositions.Length; i++)
+        {
+            if (!startingPositions[i].filled)
+            {
+                openPosition = startingPositions[i].position;
+                startingPositions[i].filled = true;
+                data.positionIndex = i;
+                break;
+            }
+        }
+
+        InstantiateObj(data, openPosition);
+        beaker.DestroyObj();
+        menu.AddToMenu(data.matColor, data.setName);
     }
 
-    public void setMenu(int numItems)
+    /*
+     * Purpose: instantiate the new item obj in specified position
+     */
+    public GameObject InstantiateObj(Item data, Vector3 position)
+    {
+        GameObject newItem = Instantiate(baseItem);
+        newItem.GetComponent<ItemObjScript>().SetData(data);
+
+        newItem.GetComponent<Renderer>().material.color = data.matColor;
+
+        newItem.transform.position = position;
+
+        return newItem;
+    }
+
+    /*
+     * Purpose: once an item is removed, mark that position as open
+     */
+    public void ClearPositions(GameObject obj)
+    {
+        int index = obj.GetComponent<ItemObjScript>().GetIndex();
+
+        startingPositions[index].filled = false;
+    }
+
+    /*
+     * Purpose: init the menu and create the 4 base items
+     */
+    public void SetMenu(int numItems)
     {
         menu.InitMenu(numItems);
         SpawnStartItems();

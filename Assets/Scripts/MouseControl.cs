@@ -6,15 +6,11 @@ public class MouseControl : MonoBehaviour
 {
     Ray ray;
     RaycastHit hit;
-    public Beaker_Script beaker;
+    public Beaker_Script beaker; //to add clicked obj to the beaker
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    /*
+     * Purpose: get mouse inputs when clicking on game objects
+     */
     void Update()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -22,9 +18,8 @@ public class MouseControl : MonoBehaviour
         {
             if(Input.GetMouseButtonDown(0))
             {
-                if (hit.collider.tag == "Item")
+                if (hit.collider.CompareTag("Item"))
                 {
-                    print("Pressed");
                     hit.transform.position = beaker.transform.position;
                 }
             }
